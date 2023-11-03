@@ -31,6 +31,9 @@ local-e2e:
     
 e2e:
   stage: test
-  image: docker
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
   script:
+    - docker info
     - docker run -it -v $PWD:/e2e -w /e2e cypress/included:13.4.0
