@@ -27,3 +27,12 @@ local-e2e:
     - npm start &
     # then run the E2E tests
     - npx cypress run --record #--tag local
+
+    
+e2e:
+  stage: test
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - docker run -it -v $PWD:/e2e -w /e2e cypress/included:13.4.0
