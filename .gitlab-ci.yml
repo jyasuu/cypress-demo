@@ -1,0 +1,29 @@
+
+
+stages:
+  - test
+
+# to cache both npm modules and Cypress binary we use environment variables
+# to point at the folders we can list as paths in "cache" job settings
+# see the Node caching advice for GitLab CI
+# https://docs.gitlab.com/ee/ci/caching/#cache-nodejs-dependencies
+# see Cypress caching documentation at
+# https://on.cypress.io/caching
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+
+local-e2e:
+  stage: test
+  image: cypress/base:20.9.0
+  cache:
+    paths:
+      - .npm
+      - cache/Cypress
+  script:
+    - npm ci --prefer-offline
+    # let's test the site first
+    # start the server in the background
+    - npm start &
+    # then run the E2E tests
+    - npx cypress run --record #--tag local
