@@ -21,19 +21,12 @@ local-e2e:
       - .npm
       - cache/Cypress
   script:
-    - npm ci --prefer-offline
+    - npm install
     # let's test the site first
     # start the server in the background
-    - npm start &
+    # - npm start &
     # then run the E2E tests
-    - npx cypress run --record #--tag local
-
-    
-e2e:
-  stage: test
-  image: docker:24.0.5
-  services:
-    - docker:24.0.5-dind
-  script:
-    - docker info
-    - docker run -it -v $PWD:/e2e -w /e2e cypress/included:13.4.0
+    - npx cypress run #--record #--tag local
+  artifacts:
+    reports:
+      junit: results/*.xml
